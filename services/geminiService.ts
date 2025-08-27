@@ -22,7 +22,7 @@ const ai = new GoogleGenAI({ apiKey: API_KEY });
  * @returns The fallback prompt string.
  */
 function getFallbackPrompt(character: string): string {
-    return `Place the person from the photo into a video game world. Dress them in the PUBG outfit named "${character}". It is very important that their face is clearly visible and not covered by a helmet or mask. Keep all their original facial features. The background should be a scene from a battle royale game. The final image should look like a realistic photograph.`;
+    return `Place the person from the photo into a video game world. Dress them in the PUBG outfit named "${character}". It is very important that their face is clearly visible and not covered by a helmet or mask. Keep all their original facial features. The background should be a scene from a popular online multiplayer game. The final image should look like a realistic photograph.`;
 }
 
 /**
@@ -31,7 +31,7 @@ function getFallbackPrompt(character: string): string {
  * @returns The outfit name string or null if not found.
  */
 function extractCharacter(prompt: string): string | null {
-    const match = prompt.match(/- \*\*Outfit:\*\* Dress them in the "(.*?)" outfit from PUBG./);
+    const match = prompt.match(/- \*\*Outfit:\*\* Dress them in the following PUBG outfit: "(.*?)"\./);
     return match ? match[1] : null;
 }
 
@@ -60,8 +60,8 @@ function processGeminiResponse(response: GenerateContentResponse): string {
  * @returns The result of the API call.
  */
 async function withRetry<T>(apiCall: () => Promise<T>): Promise<T> {
-    const maxRetries = 3;
-    const initialDelay = 1000;
+    const maxRetries = 4;
+    const initialDelay = 2000;
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
@@ -148,6 +148,7 @@ export async function generateCharacterImage(imageDataUrl: string, prompt: strin
                     model: 'gemini-2.5-flash-image-preview',
                     contents: { parts: [imagePart, fallbackTextPart] },
                     config: {
+                        // FIX: Corrected typo from Mod.TEXT to Modality.TEXT
                         responseModalities: [Modality.IMAGE, Modality.TEXT],
                     },
                 }));

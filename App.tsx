@@ -9,31 +9,48 @@ import PolaroidCard from './components/PolaroidCard';
 import { createAlbumPage } from './lib/albumUtils';
 import Footer from './components/Footer';
 
-const MALE_CHARACTERS = [
-    'The Fool Set', 'Blood Raven X-Suit', 'Ghillie Suit', 'Golden Pharaoh X-Suit', 'Enraged Unicorn Set', 
-    'Executioner Set', 'Lone Survivor Set', 'Tidal Embrace Set', 'White Rabbit Set', 'Black Cat Set', 'Ranger Set', 'PMC Uniform'
+const COMMON_MALE_OUTFITS = [
+    'Iconic trench coat with a level 1 helmet',
+    'White shirt, tie, and blue jeans from the loading screen',
+    'Full tactical gear with a level 3 helmet and vest',
+    'Ghillie suit for stealthy camouflage',
+    'Biker jacket, ripped jeans, and combat boots',
+    'Camo cargo pants and a dark t-shirt',
+    'Padded jacket for cold weather maps',
+    'Simple hoodie and jeans for a casual look'
 ];
 
-const FEMALE_CHARACTERS = [
-    'Silvanus X-Suit', 'Valkyrie Set', 'Jester Set', 'Avalanche X-Suit', 'Medical Robe Set', 'Noble Lineage Set', 
-    'Stray Rebellion Set', 'Forest Warrior Set', 'Cyber Enforcer Set', 'Maverick Set', 'Lady of Blood Set', 'Infectious Bugs Set'
+const COMMON_FEMALE_OUTFITS = [
+    'Pleated mini-skirt and white shirt (schoolgirl outfit)',
+    'Leather hotpants and a cropped tank top',
+    'Full tactical gear with a level 2 helmet and vest',
+    'Plaid shirt, denim shorts, and combat boots',
+    'Floral print dress for a surprising look on the battlefield',
+    'Black turtleneck and tactical pants',
+    'Ghillie suit for maximum concealment',
+    'Sporty tracksuit with sneakers'
 ];
 
-const MAPS = ['Erangel', 'Miramar', 'Sanhok', 'Vikendi', 'Karakin', 'a deserted city', 'a weathered battlefield'];
+const MAPS = [
+    'Georgopol, Erangel', 'Pochinki, Erangel', 'Hacienda del Patrón, Miramar', 'Pecado, Miramar',
+    'Bootcamp, Sanhok', 'Paradise Resort, Sanhok', 'Dino Park, Vikendi', 'Castle, Vikendi'
+];
 const SCENARIOS = [
-    'looting a rare airdrop crate', 'taking cover behind a rock', 'scouting from a high vantage point', 
-    'driving a UAZ across a field', 'celebrating a "Winner Winner Chicken Dinner!"', 'emerging from the blue zone',
-    'planning their next move', 'parachuting onto the battlegrounds', 'gearing up for the final circle'
+    'looting a rare airdrop crate', 'taking cover behind a rock', 'scouting from a high vantage point',
+    'driving a Dacia across a bridge', 'celebrating a "Winner Winner Chicken Dinner!"', 'reviving a downed teammate',
+    'peeking around a corner of a building', 'throwing a smoke grenade for cover', 'parachuting onto the island',
+    'gearing up for the final circle', 'healing up with a first aid kit', 'in a tense standoff inside a house'
 ];
 
 const MAP_DESCRIPTIONS: Record<string, string> = {
-    'Erangel': 'a lush, green Eastern European island with dense forests, rolling grassy hills, and abandoned Soviet-style towns.',
-    'Miramar': 'a vast, sun-scorched desert with arid landscapes, rocky canyons, small villages, and a large city.',
-    'Sanhok': 'a dense, tropical jungle island inspired by Southeast Asia, with ancient ruins, riverside villages, and thick vegetation.',
-    'Vikendi': 'a snow-covered northern European island with frozen lakes, coniferous forests, a dinosaur-themed park, and quaint mountain towns.',
-    'Karakin': 'a small, arid North African island with rocky terrain, underground tunnels, and destructible buildings.',
-    'a deserted city': 'an abandoned, post-apocalyptic city with crumbling skyscrapers, overgrown streets, and a sense of eerie silence.',
-    'a weathered battlefield': 'a war-torn landscape scarred with trenches, craters, and the remnants of past battles, under a grey, overcast sky.'
+    'Georgopol, Erangel': 'the large port city of Georgopol on Erangel, with its towering cranes, shipping containers, and apartment buildings.',
+    'Pochinki, Erangel': 'the iconic, centrally located town of Pochinki on Erangel, famous for its dense cluster of buildings and popular for early-game encounters.',
+    'Hacienda del Patrón, Miramar': 'the luxurious Hacienda del Patrón in Miramar, a large villa surrounded by walls, a prime location for high-tier loot.',
+    'Pecado, Miramar': 'the bustling city of Pecado in Miramar, featuring a large casino and a boxing arena that attract bold players.',
+    'Bootcamp, Sanhok': 'the central military training facility of Bootcamp on Sanhok, a compact and action-packed area for skilled players.',
+    'Paradise Resort, Sanhok': 'the scenic Paradise Resort on Sanhok, a beautiful but dangerous location with multiple hotel buildings and courtyards.',
+    'Dino Park, Vikendi': 'the abandoned, snow-covered Dino Park on Vikendi, complete with dinosaur statues, a maze, and a roller coaster.',
+    'Castle, Vikendi': 'the majestic, snow-dusted Castle on Vikendi, a multi-level fortress surrounded by a moat, offering strategic high ground.'
 };
 
 
@@ -130,12 +147,12 @@ function App() {
                     const gender = await detectGender(imageDataUrl);
                     let pool: string[] = [];
                     if (gender === 'Male') {
-                        pool = MALE_CHARACTERS;
+                        pool = COMMON_MALE_OUTFITS;
                     } else if (gender === 'Female') {
-                        pool = FEMALE_CHARACTERS;
+                        pool = COMMON_FEMALE_OUTFITS;
                     } else {
                         // If unknown, combine and shuffle for variety
-                        pool = shuffleArray([...MALE_CHARACTERS, ...FEMALE_CHARACTERS]);
+                        pool = shuffleArray([...COMMON_MALE_OUTFITS, ...COMMON_FEMALE_OUTFITS]);
                     }
                     
                     // Generate a random loadout
@@ -173,8 +190,8 @@ function App() {
 
         return `
 Photo edit request: Change the person in the photo into a ${genderClause} video game character.
-- **Outfit:** Dress them in the "${character}" outfit from PUBG.
-- **Face:** Their face must be perfectly preserved from the original photo and must be fully visible. Do not add any masks, helmets, or face coverings.
+- **Outfit:** Dress them in the following PUBG outfit: "${character}".
+- **Face:** Their face must be perfectly preserved from the original photo and must be fully visible. Do not add any masks, helmets, or face coverings unless specified in the outfit description.
 - **Action:** Place them in the following scene: "${scenario}".
 - **Location:** The background should be ${mapDescription}.
 - **Style:** The final image should have the high-quality, realistic style of a modern video game.
