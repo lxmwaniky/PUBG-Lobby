@@ -39,11 +39,11 @@ const ErrorDisplay = () => (
 );
 
 const Placeholder = () => (
-    <div className="flex flex-col items-center justify-center h-full text-neutral-600 group-hover:text-neutral-400 transition-colors duration-300">
+    <div className="flex flex-col items-center justify-center h-full text-neutral-600 group-hover:text-neutral-400 transition-colors duration-300 p-4 text-center">
        <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
        </svg>
-        <span className="font-teko text-3xl tracking-wider">Upload Operator Photo</span>
+        <span className="font-teko text-2xl sm:text-3xl tracking-wider">Upload Operator Photo</span>
     </div>
 );
 
@@ -187,14 +187,14 @@ const PolaroidCard: React.FC<PolaroidCardProps> = ({ imageUrl, caption, status, 
                 {status === 'done' && !imageUrl && <Placeholder />}
             </div>
             <div className="absolute bottom-4 left-4 right-4 text-center px-2">
-                <p className="font-teko text-3xl tracking-wider text-neutral-300 truncate">
+                <p className="font-teko text-2xl sm:text-3xl tracking-wider text-neutral-300 truncate">
                     {caption}
                 </p>
             </div>
         </>
     );
 
-    const cardClasses = "bg-zinc-800 border-2 border-zinc-700/50 p-4 pb-16 flex flex-col items-center justify-start aspect-[3/4] w-80 max-w-full shadow-lg relative shadow-yellow-500/10";
+    const cardClasses = "bg-zinc-800 border-2 border-zinc-700/50 p-4 pb-16 flex flex-col items-center justify-start aspect-[3/4] w-[90vw] sm:w-80 shadow-lg relative shadow-yellow-500/10";
 
     if (isMobile) {
         return (

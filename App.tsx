@@ -21,9 +21,9 @@ const FEMALE_CHARACTERS = [
 
 const MAPS = ['Erangel', 'Miramar', 'Sanhok', 'Vikendi', 'Karakin', 'a deserted city', 'a weathered battlefield'];
 const SCENARIOS = [
-    'looting a rare airdrop crate', 'in a tense firefight', 'scouting from a high vantage point', 
+    'looting a rare airdrop crate', 'taking cover behind a rock', 'scouting from a high vantage point', 
     'driving a UAZ across a field', 'celebrating a "Winner Winner Chicken Dinner!"', 'emerging from the blue zone',
-    'setting up an ambush', 'parachuting onto the battlegrounds', 'in the final circle showdown'
+    'planning their next move', 'parachuting onto the battlegrounds', 'gearing up for the final circle'
 ];
 
 const MAP_DESCRIPTIONS: Record<string, string> = {
@@ -70,8 +70,8 @@ interface GenerationItem {
 
 type Gender = 'Male' | 'Female' | 'Unknown';
 
-const primaryButtonClasses = "font-teko text-2xl tracking-wider text-black bg-yellow-500 py-3 px-10 transform transition-transform duration-200 hover:scale-105 hover:bg-yellow-400 disabled:bg-neutral-600 disabled:text-neutral-400 disabled:cursor-not-allowed disabled:transform-none";
-const secondaryButtonClasses = "font-teko text-2xl tracking-wider text-white bg-transparent border-2 border-neutral-400 py-3 px-10 transform transition-transform duration-200 hover:scale-105 hover:bg-neutral-400 hover:text-black";
+const primaryButtonClasses = "font-teko text-xl sm:text-2xl tracking-wider text-black bg-yellow-500 py-3 px-8 sm:px-10 transform transition-transform duration-200 hover:scale-105 hover:bg-yellow-400 disabled:bg-neutral-600 disabled:text-neutral-400 disabled:cursor-not-allowed disabled:transform-none";
+const secondaryButtonClasses = "font-teko text-xl sm:text-2xl tracking-wider text-white bg-transparent border-2 border-neutral-400 py-3 px-8 sm:px-10 transform transition-transform duration-200 hover:scale-105 hover:bg-neutral-400 hover:text-black";
 
 const useMediaQuery = (query: string) => {
     const [matches, setMatches] = useState(false);
@@ -168,21 +168,16 @@ function App() {
     const generatePrompt = (item: GenerationItem, gender: Gender | null): string => {
         const { character, map, scenario } = item;
         
-        const genderClause = gender === 'Male' ? ' as a male character' : gender === 'Female' ? ' as a female character' : '';
+        const genderClause = gender === 'Male' ? 'male' : gender === 'Female' ? 'female' : 'person';
         const mapDescription = MAP_DESCRIPTIONS[map] || `the battle royale map "${map}"`;
 
         return `
-**PRIORITY 1: FACE ACCURACY & VISIBILITY**
-The face of the character in the generated image MUST be a PERFECT and EXACT replica of the face from the uploaded photo. Every facial feature must be preserved. CRITICALLY, the face must be fully visible and NOT be covered by any helmets, masks, or headgear, even if the outfit typically includes them. The goal is to see the person's face clearly.
-
-**PRIORITY 2: SCENE DESCRIPTION**
-Reimagine the person from the photo${genderClause}, wearing the iconic PUBG outfit: "${character}".
-
-**ACTION:** Place them in a dynamic, high-action pose, captured mid-moment during this scenario: "${scenario}".
-
-**ENVIRONMENT:** The setting is ${mapDescription}. The environment must be highly detailed, graphically rich, and recognizable as the described map.
-
-**STYLE:** The final output must be a gritty, photorealistic, and cinematic image that looks like a high-resolution screenshot from a next-generation video game.
+Photo edit request: Change the person in the photo into a ${genderClause} video game character.
+- **Outfit:** Dress them in the "${character}" outfit from PUBG.
+- **Face:** Their face must be perfectly preserved from the original photo and must be fully visible. Do not add any masks, helmets, or face coverings.
+- **Action:** Place them in the following scene: "${scenario}".
+- **Location:** The background should be ${mapDescription}.
+- **Style:** The final image should have the high-quality, realistic style of a modern video game.
 `;
     };
 
@@ -400,12 +395,12 @@ Reimagine the person from the photo${genderClause}, wearing the iconic PUBG outf
     };
 
     return (
-        <main className="bg-transparent text-neutral-200 min-h-screen w-full flex flex-col items-center justify-center p-4 pb-24 overflow-hidden relative">
+        <main className="bg-transparent text-neutral-200 min-h-screen w-full flex flex-col items-center justify-center p-4 md:p-8 pb-28 overflow-hidden relative">
             
             <div className="z-10 flex flex-col items-center justify-center w-full h-full flex-1 min-h-0">
                 <div className="text-center mb-10">
-                    <h1 className="text-7xl md:text-9xl font-teko text-neutral-100 uppercase" style={{ WebkitTextStroke: '2px #F59E0B', textShadow: '4px 4px 0px #000' }}>PUBG Lobby</h1>
-                    <p className="font-roboto text-neutral-300 mt-2 text-xl tracking-wide">Gear up for the Battlegrounds.</p>
+                    <h1 className="text-6xl sm:text-7xl md:text-9xl font-teko text-neutral-100 uppercase" style={{ WebkitTextStroke: '2px #F59E0B', textShadow: '4px 4px 0px #000' }}>PUBG Lobby</h1>
+                    <p className="font-roboto text-neutral-300 mt-2 text-lg sm:text-xl tracking-wide">Gear up for the Battlegrounds.</p>
                 </div>
 
                 {appState === 'idle' && (
@@ -441,11 +436,11 @@ Reimagine the person from the photo${genderClause}, wearing the iconic PUBG outf
                     <div className="w-full h-full flex flex-col items-center justify-center">
                         {appState === 'generating' && (
                              <div className="text-center mb-8">
-                                <h2 className="font-teko text-5xl text-yellow-500 tracking-wider">Generating Your Loadout...</h2>
+                                <h2 className="font-teko text-4xl sm:text-5xl text-yellow-500 tracking-wider">Generating Your Loadout...</h2>
                                 <p className="text-neutral-400 mt-1">Please wait, this can take a minute.</p>
                              </div>
                         )}
-                        <div ref={dragAreaRef} className={`relative w-full h-full flex-1 ${isMobile ? 'flex flex-col items-center overflow-y-auto space-y-8' : ''}`}>
+                        <div ref={dragAreaRef} className={`relative w-full h-full flex-1 ${isMobile ? 'flex flex-col items-center overflow-y-auto space-y-8 px-2 sm:px-4' : ''}`}>
                             {generationItems.map((item, index) => (
                                 <motion.div
                                     key={item.character}
@@ -475,7 +470,7 @@ Reimagine the person from the photo${genderClause}, wearing the iconic PUBG outf
                         </div>
 
                         {appState === 'results-shown' && (
-                           <div className="z-20 mt-8 mb-4 flex flex-col sm:flex-row items-center gap-4">
+                           <div className="z-20 mt-6 sm:mt-8 mb-4 flex flex-col sm:flex-row items-center gap-4">
                                <button onClick={handleDownloadAlbum} className={primaryButtonClasses} disabled={isDownloading}>
                                    {isDownloading ? "Preparing..." : "Download Album"}
                                </button>
